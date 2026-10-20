@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ana praznuje 50</title>
+<meta property="og:title" content="Praznujem 50">
+<meta property="og:description" content="Zate imam pismo. Odpri ga.">
+<meta name="theme-color" content="#0b0a08">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap">
+<style>
+/* Layout: en zaslon — črna ovojnica z zlatim pečatom v sredini; ob odprtju iz nje zdrsne kartica (spredaj vabilo, zadaj potrditev). */
+:root{
+  --ink:#0b0a08; --ink-2:#15130f; --ink-3:#1e1b15;
+  --env:#171411; --env-2:#211d17;
+  --gold:#d6b56a; --gold-hi:#f1dca4; --gold-lo:#8c7034;
+  --paper:#0f0d0a; --paper-ink:#e2c47c; --paper-muted:#a08a5a; --paper-line:rgba(214,181,106,.32);
+  --cream:#efe8da; --muted:#9d937f; --line:rgba(214,181,106,.3);
+  --display:"Bodoni Moda","Didot","Bodoni 72",Georgia,serif;
+  --body:"Jost","Futura","Century Gothic",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:radial-gradient(110% 70% at 50% 42%,#231c11 0%,var(--ink) 65%) var(--ink);color:var(--cream);font-family:var(--body);font-weight:300;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow:hidden}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+.stage{position:relative;height:100%;display:flex;align-items:center;justify-content:center;perspective:1400px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Ovojnica */
+.scene{--W:min(88vw,440px);--H:calc(var(--W)*.66);position:relative;width:var(--W);height:var(--H);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.part{position:absolute;transition:transform 1.3s cubic-bezier(.5,0,.2,1),opacity 1.1s ease}
+.back{inset:0;background:var(--env);border-radius:6px;box-shadow:0 30px 60px -20px rgba(0,0,0,.8),0 0 0 1px var(--line);z-index:1;overflow:hidden}
+.back::before{content:"";position:absolute;inset:6px;border-radius:3px;background:repeating-linear-gradient(45deg,rgba(214,181,106,.10) 0 1px,transparent 1px 9px),var(--env-2)}
+.pocket-wrap{inset:0;z-index:3;filter:drop-shadow(0 -1px 0 var(--gold-lo));pointer-events:none}
+.pocket{position:absolute;inset:0;background:linear-gradient(180deg,#1b1814,var(--env));clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%);border-radius:0 0 6px 6px}
+.addr{position:absolute;left:0;right:0;bottom:12%;display:flex;flex-direction:column;align-items:center;gap:4px;z-index:4;pointer-events:none}
+.addr .to{font-family:var(--display);font-style:italic;font-size:calc(var(--W)*.07);color:var(--gold-hi)}
+.addr .from{font-size:.68rem;letter-spacing:.32em;text-transform:uppercase;color:var(--muted)}
+.flap-wrap{left:0;right:0;top:0;height:62%;z-index:5;transform-origin:50% 0;transform:perspective(900px) rotateX(0);transition:transform .75s cubic-bezier(.45,0,.25,1);filter:drop-shadow(0 2px 0 var(--gold-lo)) drop-shadow(0 10px 14px rgba(0,0,0,.45))}
+.flap{position:absolute;inset:0;background:linear-gradient(175deg,var(--env-2),var(--env) 70%);clip-path:polygon(0 0,100% 0,50% 100%);border-radius:6px 6px 0 0}
+.open .flap-wrap{transform:perspective(900px) rotateX(180deg)}
+.flap-behind .flap-wrap{z-index:0}
+.seal{position:absolute;left:50%;top:62%;width:calc(var(--W)*.2);aspect-ratio:1;max-width:100%;transform:translate(-50%,-55%);z-index:6;border:0;padding:0;cursor:pointer;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,var(--gold-hi),var(--gold) 38%,var(--gold-lo) 75%,#5e4920);
+  box-shadow:0 6px 14px rgba(0,0,0,.55),inset 0 -3px 6px rgba(0,0,0,.35),inset 0 2px 3px rgba(255,255,255,.35);
+  display:flex;align-items:center;justify-content:center;transition:transform .5s cubic-bezier(.5,0,.6,1),opacity .45s ease}
+.seal::before{content:"";position:absolute;inset:12%;border-radius:50%;border:1px solid rgba(60,45,15,.55);box-shadow:0 1px 0 rgba(255,240,200,.35)}
+.seal span{font:600 calc(var(--W)*.068)/1 var(--display);color:#4a3815;text-shadow:0 1px 0 rgba(255,235,190,.5);letter-spacing:-.02em}
+.seal:focus-visible{outline:2px solid var(--gold-hi);outline-offset:4px}
+.closed .seal{animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 6px 14px rgba(0,0,0,.55),inset 0 -3px 6px rgba(0,0,0,.35),inset 0 2px 3px rgba(255,255,255,.35),0 0 0 0 rgba(241,220,164,.0)}50%{box-shadow:0 6px 14px rgba(0,0,0,.55),inset 0 -3px 6px rgba(0,0,0,.35),inset 0 2px 3px rgba(255,255,255,.35),0 0 0 10px rgba(241,220,164,.12)}}
+.broken .seal{transform:translate(-50%,40%) rotate(28deg) scale(.7);opacity:0;pointer-events:none}
+.gone .back,.gone .pocket-wrap,.gone .addr,.gone .flap-wrap{transform:translateY(60vh) rotate(-4deg);opacity:0}
+.hint{position:absolute;left:0;right:0;bottom:calc(-1 * var(--H) * .32 - 18px);text-align:center;font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:opacity .4s}
+.hint button{appearance:none;background:none;border:0;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;padding:8px}
+.hint button:focus-visible{outline:2px solid var(--gold-hi)}
+.broken .hint{opacity:0;pointer-events:none}
+
+/* Kartica */
+.card{position:absolute;left:5%;top:7%;width:90%;height:86%;z-index:2;perspective:1600px;
+  transition:transform 2.2s cubic-bezier(.33,.0,.2,1),top 1.6s cubic-bezier(.4,.1,.2,1),left 1.6s cubic-bezier(.4,.1,.2,1),width 1.6s cubic-bezier(.4,.1,.2,1),height 1.6s cubic-bezier(.4,.1,.2,1)}
+.rise .card{transform:translateY(-62%)}
+.out .card{z-index:10;transform:none;width:var(--cw);height:var(--ch);left:calc(50% - var(--cw)/2);top:calc(50% - var(--ch)/2)}
+.flip{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.4,.1,.2,1)}
+.flipped .flip{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:4px;overflow:hidden;
+  background:radial-gradient(120% 70% at 50% 0%,#1c1811,var(--paper) 60%);color:var(--paper-ink);border:1px solid var(--gold-lo);box-shadow:0 30px 70px -25px rgba(0,0,0,.9),0 0 40px -10px rgba(214,181,106,.18)}
+.face::before{content:"";position:absolute;inset:10px;border:1px solid var(--paper-line);pointer-events:none;border-radius:2px}
+.face.backside{transform:rotateY(180deg)}
+.scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;padding:clamp(26px,6vw,44px) clamp(24px,6vw,44px);display:flex;flex-direction:column;gap:22px;-webkit-overflow-scrolling:touch}
+.locked .scroll{overflow:hidden}
+.eyebrow{font-weight:500;font-size:.68rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-lo)}
+.big50{font:400 clamp(5.5rem,26vw,9rem)/.85 var(--display);letter-spacing:-.04em;margin:0;background:linear-gradient(170deg,#f8e8bb,#d6b56a 50%,#9c7a35);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(1.7rem,6.5vw,2.3rem);line-height:1.1;margin:0;text-wrap:balance}
+h1 em{font-style:italic;color:var(--gold-hi)}
+.lead{margin:0;color:#cdb47a;max-width:34ch}
+.eyebrow{color:var(--gold)}
+dl.facts{margin:0;display:grid;grid-template-columns:auto 1fr;column-gap:18px;border-top:1px solid var(--paper-line)}
+dl.facts dt,dl.facts dd{margin:0;padding:11px 0;border-bottom:1px solid var(--paper-line)}
+dl.facts dt{font-weight:500;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-lo);padding-top:15px}
+dl.facts dd{font-family:var(--display);font-size:1.1rem;min-width:0;overflow-wrap:anywhere}
+dl.facts dd small{display:block;font-family:var(--body);font-size:.85rem;color:var(--paper-muted)}
+.tbd{color:var(--paper-muted);font-style:italic}
+.count{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.count div{display:flex;flex-direction:column;gap:2px;border-left:1px solid var(--paper-line);padding-left:10px}
+.count b{font:400 1.7rem/1 var(--display);font-variant-numeric:tabular-nums lining-nums;color:var(--gold-hi)}
+.count span{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--paper-muted)}
+.soon{margin:0;font-family:var(--display);font-style:italic;color:var(--paper-muted)}
+.calrow{display:flex;flex-direction:column;gap:10px}
+.callinks{display:flex;flex-wrap:wrap;gap:8px}
+.cal{color:var(--gold-hi);font-size:.86rem;text-decoration:none;border:1px solid var(--paper-line);padding:9px 14px;border-radius:999px}
+.cal:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
+.btn{appearance:none;border:0;cursor:pointer;background:linear-gradient(170deg,var(--gold-hi),var(--gold) 55%,var(--gold-lo));color:var(--ink);font:500 .76rem var(--body);letter-spacing:.24em;text-transform:uppercase;padding:15px 20px;border-radius:2px;text-align:center;text-decoration:none;display:inline-block}
+.btn.ghost{background:none;color:var(--paper-ink);border:1px solid var(--paper-line)}
+.btn:focus-visible,.link:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.link{appearance:none;background:none;border:0;padding:4px 0;cursor:pointer;font:italic 400 1rem var(--display);color:var(--gold-hi);align-self:flex-start}
+.credit{margin:0;font-size:.62rem;letter-spacing:.06em;color:var(--paper-muted);opacity:.8}
+.sign{margin:0;font-family:var(--display);font-style:italic;font-size:1.3rem;color:var(--gold-hi)}
+form{display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.legend{font-weight:500;font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-lo)}
+input[type=text],select,textarea{width:100%;background:rgba(214,181,106,.06);border:1px solid var(--paper-line);border-radius:2px;color:var(--cream);font:400 1rem var(--body);padding:11px 12px;color-scheme:dark}
+input::placeholder,textarea::placeholder{color:var(--paper-muted)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+textarea{min-height:76px;resize:vertical}
+fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+.choice{display:flex;gap:8px;flex-wrap:wrap}
+.choice label{flex:1 1 120px;display:flex;justify-content:center;border:1px solid var(--paper-line);padding:12px;cursor:pointer;font-family:var(--display);font-size:1.05rem;transition:background .2s,color .2s}
+.choice input{position:absolute;opacity:0;pointer-events:none}
+.choice input:checked+label{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.choice input:focus-visible+label{outline:2px solid var(--gold-hi);outline-offset:2px}
+.row{display:grid;grid-template-columns:1fr 2fr;gap:12px}
+@media (max-width:420px){.row{grid-template-columns:1fr}}
+.err{color:#e8a08a;font-size:.9rem;margin:0}
+.result{border:1px solid var(--paper-line);padding:16px;display:flex;flex-direction:column;gap:12px;background:rgba(214,181,106,.06)}
+.result pre{margin:0;white-space:pre-wrap;font:400 .92rem/1.5 var(--body);color:var(--cream);user-select:all}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.note{margin:0;color:var(--paper-muted);font-size:.88rem}
+/* Sredinska poravnava kartice */
+.scroll{align-items:center;text-align:center}
+.scroll>*{max-width:100%}
+.lead{margin-inline:auto}
+dl.facts{grid-template-columns:1fr;width:100%;max-width:340px}
+dl.facts dt{border-bottom:0;padding:14px 0 0}
+dl.facts dd{padding:2px 0 14px}
+.count{width:100%;max-width:340px}
+.count div{align-items:center;border-left:0;padding-left:0}
+.link{align-self:center}
+form,.thanks{width:100%;max-width:360px;align-items:stretch}
+.field label,.legend{text-align:center}
+input[type=text],select{text-align:center}
+select option{background:#15130f;color:#efe8da}
+/* Kompaktno, da kartica cela pride na zaslon telefona */
+.scroll{gap:clamp(8px,1.9vh,22px);padding:clamp(18px,3.6vh,44px) clamp(20px,6vw,44px)}
+.big50{font-size:clamp(3.6rem,min(26vw,12vh),9rem)}
+h1{font-size:clamp(1.45rem,min(6.5vw,4.2vh),2.3rem)}
+.lead{font-size:clamp(.9rem,2.3vh,1rem);line-height:1.45}
+dl.facts dt{padding-top:clamp(6px,1.4vh,14px)}
+dl.facts dd{font-size:clamp(1rem,2.6vh,1.1rem);padding-bottom:clamp(6px,1.4vh,14px)}
+.count b{font-size:clamp(1.3rem,3.6vh,1.7rem)}
+.btn{padding:clamp(11px,1.9vh,15px) 20px}
+.sign{font-size:clamp(1.05rem,2.8vh,1.3rem)}
+@media (max-height:640px){
+  .front .eyebrow{display:none}
+  .big50{font-size:clamp(3rem,10vh,9rem)}
+  .scroll{gap:6px;padding-block:14px}
+  .credit{font-size:.55rem}
+  .count span{font-size:.56rem}
+}
+@media (prefers-reduced-motion:reduce){*,*::before{transition-duration:.01ms!important;animation:none!important}}
+[hidden]{display:none!important}
+html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}
+body{margin:0}
+.thanks h1{margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="stage" id="stage">
+  <div class="scene closed" id="scene">
+    <div class="part back"></div>
+
+    <article class="card" id="card" aria-live="polite">
+      <div class="flip">
+        <div class="face front">
+          <div class="scroll">
+            <span class="eyebrow">Vabilo</span>
+            <p class="big50" aria-hidden="true">50</p>
+            <h1>Praznujem <em>petdeset</em></h1>
+            <p class="lead">Pol stoletja je dober razlog za dober večer. Vesela bom, če ga preživiš z mano.</p>
+            <dl class="facts">
+              <dt>Datum</dt><dd id="fDate"></dd>
+              <dt>Kraj</dt><dd id="fPlace"></dd>
+              <dt>Ura</dt><dd id="fTime"></dd>
+            </dl>
+            <div class="count" id="count" hidden>
+              <div><b id="cD">0</b><span>dni</span></div>
+              <div><b id="cH">0</b><span>ur</span></div>
+              <div><b id="cM">0</b><span>minut</span></div>
+              <div><b id="cS">0</b><span>sekund</span></div>
+            </div>
+            <p class="soon" id="soon">Datum in kraj sporočim kmalu.</p>
+            <div><button class="btn" type="button" id="toRsvp">Potrdi udeležbo</button></div>
+            <p class="sign">Se vidimo. — <span class="hostName">Ana</span></p>
+            <p class="credit">Glasba: P. I. Čajkovski, Klavirski koncert št. 1 · posnetek Musopen</p>
+          </div>
+        </div>
+        <div class="face backside" aria-hidden="true">
+          <div class="scroll">
+            <button class="link" type="button" id="toFront">← Nazaj na vabilo</button>
+            <h1>Potrdi <em>udeležbo</em></h1>
+            <form id="rsvp" novalidate>
+              <div class="field">
+                <label for="rName">Ime in priimek</label>
+                <input type="text" id="rName" autocomplete="name" required>
+              </div>
+              <fieldset>
+                <span class="legend">Ali prideš?</span>
+                <div class="choice">
+                  <input type="radio" name="att" id="attYes" value="Pridem" checked><label for="attYes">Pridem</label>
+                  <input type="radio" name="att" id="attNo" value="Žal ne morem"><label for="attNo">Žal ne morem</label>
+                </div>
+              </fieldset>
+              <div class="field" id="yesFields">
+                <label for="rCount">Število oseb (skupaj s tabo)</label>
+                <select id="rCount"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+              </div>
+              <p class="err" id="rErr" hidden></p>
+              <div><button class="btn" type="submit" id="rSend">Pošlji potrditev</button></div>
+            </form>
+            <div class="thanks" id="thanks" hidden>
+              <h1 id="thanksTitle">Hvala!</h1>
+              <p class="lead" id="thanksText"></p>
+            </div>
+            <p class="sign">— <span class="hostName">Ana</span></p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <div class="part pocket-wrap"><div class="pocket"></div></div>
+    <div class="part addr"><span class="to">Zate</span><span class="from">od Ane</span></div>
+    <div class="part flap-wrap"><div class="flap"></div></div>
+    <button class="seal" id="seal" type="button" aria-label="Odpri pismo"><span>50</span></button>
+    <div class="hint" id="hint"><button type="button" id="hintBtn">Tapni pečat</button></div>
+  </div>
+</div>
+
+<script>
+/* ===== PODATKI O ZABAVI — dopolni, ko bodo znani (null = "sledi") ===== */
+const EVENT = {
+  host: "Ana",
+  date: "2026-11-07T19:00",
+  place: "Restavracija Pigal",
+  address: "Ajdovščina",
+  rsvpBy: null,     // npr. "2026-11-30"
+  phone: null,      // WhatsApp v mednarodni obliki brez + in presledkov
+  contact: null     // prikazan kontakt, če phone ni nastavljen
+};
+/* ===================================================================== */
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = id => document.getElementById(id);
+const TBD = '<span class="tbd">sledi</span>';
+const MES = ["januarja","februarja","marca","aprila","maja","junija","julija","avgusta","septembra","oktobra","novembra","decembra"];
+const DNI = ["nedelja","ponedeljek","torek","sreda","četrtek","petek","sobota"];
+const fmtDate = d => `${DNI[d.getDay()]}, ${d.getDate()}. ${MES[d.getMonth()]} ${d.getFullYear()}`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* --- Podatki --- */
+document.querySelectorAll(".hostName").forEach(n => n.textContent = EVENT.host);
+const when = EVENT.date ? new Date(EVENT.date) : null;
+$("fDate").innerHTML = when ? esc(fmtDate(when)) : TBD;
+$("fTime").innerHTML = when && EVENT.date.includes("T") ? `ob ${String(when.getHours()).padStart(2,"0")}.${String(when.getMinutes()).padStart(2,"0")}` : TBD;
+$("fPlace").innerHTML = EVENT.place ? esc(EVENT.place) + (EVENT.address ? `<small>${esc(EVENT.address)}</small>` : "") : TBD;
+if (when) {
+  $("soon").hidden = true; $("count").hidden = false;
+  const tick = () => { let s = Math.max(0, Math.floor((when - Date.now()) / 1000));
+    $("cD").textContent = Math.floor(s / 86400); s %= 86400; $("cH").textContent = Math.floor(s / 3600); s %= 3600;
+    $("cM").textContent = Math.floor(s / 60); $("cS").textContent = s % 60; };
+  tick(); setInterval(tick, 1000);
+}
+
+/* --- Zvok ob odprtju (po dotiku) --- */
+/* Glasba: izrez iz posnetka (Musopen, CC0); naloži in dekodira se vnaprej, predvaja ob dotiku pečata */
+let musicReady = null, analyser = null, level = 0, pulse = 0, glints = [], beats = [], nextBeat = 0, playCtx = null, playStart = 0;
+const lvBuf = new Float32Array(1024), fq = new Uint8Array(512), fqPrev = new Uint8Array(512);
+let avgFlux = 0, lastHit = 0;
+const musicDecoded = fetch("cajkovski.mp3").then(r => { if (!r.ok) throw new Error("glasba"); return r.arrayBuffer(); })
+  .then(ab => new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(2, 1, 44100).decodeAudioData(ab))
+  .then(buf => { beats = findBeats(buf); return (musicReady = buf); });
+// Udarci v posnetku: kratki odseki (20 ms), kjer energija izrazito poskoči nad nedavno povprečje
+function findBeats(buf) {
+  const d = buf.getChannelData(0), sr = buf.sampleRate, hop = Math.round(sr * .02), env = [];
+  for (let i = 0; i + hop <= d.length; i += hop) { let e = 0; for (let j = i; j < i + hop; j++) e += d[j] * d[j]; env.push(Math.sqrt(e / hop)); }
+  const out = []; let last = -1, peak = 0;
+  env.forEach(v => peak = Math.max(peak, v));
+  for (let k = 10; k < env.length; k++) {
+    let avg = 0; for (let j = k - 10; j < k; j++) avg += env[j]; avg /= 10;
+    const t = k * .02;
+    if (env[k] > avg * 1.25 && env[k] > peak * .22 && t - last > .2) { last = t; out.push({t, s: Math.min(1, env[k] / peak)}); }
+  }
+  return out;
+}
+musicDecoded.catch(() => {});
+function chime() {
+  try {
+    const A = window.AudioContext || window.webkitAudioContext; if (!A) return;
+    const a = new A(); if (a.state === "suspended") a.resume();
+    const t0 = a.currentTime + .03, sr = a.sampleRate;
+    // Glavni izhod z mehkim odmevom (dvorana)
+    const master = a.createGain(); master.gain.value = .9;
+    const comp = a.createDynamicsCompressor(); master.connect(comp).connect(a.destination);
+    const rev = a.createConvolver(), irLen = sr * 2.8, ir = a.createBuffer(2, irLen, sr);
+    for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < irLen; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 3.2); }
+    rev.buffer = ir; const wet = a.createGain(); wet.gain.value = .42; rev.connect(wet).connect(master);
+    const out = (node, dry = 1) => { const g = a.createGain(); g.gain.value = dry; node.connect(g).connect(master); node.connect(rev); };
+    const noiseBuf = a.createBuffer(1, sr * 2, sr); { const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+    const noise = (t, dur, type, f0, f1, vol, q = .8) => {
+      const s = a.createBufferSource(); s.buffer = noiseBuf;
+      const f = a.createBiquadFilter(); f.type = type; f.Q.value = q; f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      const g = a.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + dur * .25); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      s.connect(f).connect(g); out(g, 1); s.start(t); s.stop(t + dur + .05);
+    };
+    // Glasbena skrinjica: topel zvon z nežnimi alikvoti
+    const box = (freq, t, vol = .11, dur = 2.4) => {
+      const g = a.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+      [[1, 1, "sine"], [2, .28, "sine"], [3.01, .09, "sine"], [1.002, .35, "triangle"]].forEach(([m, v, type]) => {
+        const o = a.createOscillator(), og = a.createGain(); o.type = type; o.frequency.value = freq * m; og.gain.value = v;
+        o.connect(og).connect(g); o.start(t); o.stop(t + dur);
+      });
+      out(g, .8);
+    };
+    const pad = (freqs, t, dur, vol = .035) => freqs.forEach(f => {
+      const o = a.createOscillator(), g = a.createGain(), lp = a.createBiquadFilter(); o.type = "sawtooth"; o.frequency.value = f; lp.type = "lowpass"; lp.frequency.value = 900;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + 1.2); g.gain.setValueAtTime(vol, t + dur - 2); g.gain.linearRampToValueAtTime(0, t + dur);
+      o.connect(lp).connect(g); out(g, .7); o.start(t); o.stop(t + dur + .1);
+    });
+    const s = reduce ? 0 : 1;
+    // Časovnica je usklajena z akordi v posnetku (sekunde od dotika): 0 pečat, 0,6 zavihek, 2,1 kartica, 5,0 konfeti
+    noise(t0, .09, "bandpass", 2600, 900, .3, 1.4);                    // pečat poči
+    noise(t0 + .6 * s, .7, "bandpass", 900, 3200, .07, .6);            // zavihek zašelesti
+    noise(t0 + 2.1 * s, 2.2, "lowpass", 500, 2600, .05, .5);           // kartica drsi ven
+    [3136, 3951, 4699, 5274].forEach((f, i) => box(f, t0 + 5.6 * s + i * .045, .018, 1.2));   // iskrice ob konfetih
+    // Posnetek – P. I. Čajkovski, Klavirski koncert št. 1, 1. stavek (Musopen, CC0); glasba se začne 2 s pred izhodom kartice, glasni akord pade ravno ob izhodu
+    let t = t0 + 1.5 * s + 18;
+    if (musicReady) {
+      const buf = musicReady, src = a.createBufferSource(), g = a.createGain(), st = t0 + 1.5 * s, end = st + buf.duration;
+      src.buffer = buf; const hit = t0 + 5.6 * s;   // polna glasnost, ko je kartica vidno zunaj (izhod se začne pri 5,0 s)
+      g.gain.setValueAtTime(.05, st); g.gain.setValueAtTime(.05, hit - .15); g.gain.linearRampToValueAtTime(.95, hit);   // prvi dve sekundi tiše, nato polno
+      g.gain.setValueAtTime(.95, end - 3); g.gain.linearRampToValueAtTime(0, end - .05);
+      src.connect(g).connect(a.destination); src.start(st);
+      analyser = a.createAnalyser(); analyser.fftSize = 1024; g.connect(analyser);   // za iskrice, ki sledijo glasnosti
+      playCtx = a; playStart = st; nextBeat = 0;
+    }
+    setTimeout(() => a.close(), (t - a.currentTime + 4.5) * 1000);
+  } catch (_) {}
+}
+
+/* --- Bleščice in konfeti (2D) --- */
+const cv = $("fx"), cx = cv.getContext("2d");
+let W = 0, H = 0, DPR = Math.min(devicePixelRatio || 1, 2);
+function size() { W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0); }
+size(); addEventListener("resize", () => { size(); fitCard(); });
+const dust = Array.from({length: reduce ? 30 : 90}, () => ({x: Math.random(), y: Math.random(), r: .6 + Math.random() * 1.8, ph: Math.random() * 6.28, sp: .3 + Math.random() * .8}));
+let bits = [];
+function burst() {
+  const r = $("scene").getBoundingClientRect(), ox = r.left + r.width / 2, oy = r.top + r.height * .45;
+  const cols = ["#e9c66f", "#f6e3b0", "#b8893a", "#ffffff", "#d9ad55"];
+  bits = Array.from({length: reduce ? 40 : 170}, (_, i) => { const a = -Math.PI / 2 + (Math.random() - .5) * 2.6, s = 6 + Math.random() * 9;
+    return {x: ox, y: oy, vx: Math.cos(a) * s, vy: Math.sin(a) * s, w: 5 + Math.random() * 5, h: 9 + Math.random() * 7, rot: Math.random() * 6, vr: (Math.random() - .5) * .4, flip: Math.random() * 6, c: cols[i % cols.length]}; });
+}
+(function draw(t) {
+  requestAnimationFrame(draw); t = (t || 0) / 1000;
+  cx.clearRect(0, 0, W, H);
+  // Glasnost glasbe (0–1): iskrice zažarijo in zrastejo ob glasnih mestih
+  // Udarci v glasbi (akordi): nenaden skok glasnosti nad povprečjem sproži blesk iskric
+  pulse *= .86;
+  if (analyser) { analyser.getFloatTimeDomainData(lvBuf); let e = 0; for (let i = 0; i < lvBuf.length; i++) e += lvBuf[i] * lvBuf[i];
+    level += (Math.min(1, Math.sqrt(e / lvBuf.length) * 4.5) - level) * .2; }
+  // Iskrice sproti poslušajo predvajano glasbo: nenaden porast energije (udarec, akord) sproži blesk
+  if (analyser && playCtx && playCtx.state !== "closed" && !reduce) {
+    analyser.getByteFrequencyData(fq); let flux = 0;
+    for (let i = 2; i < 120; i++) { const d = fq[i] - fqPrev[i]; if (d > 0) flux += d; }
+    fqPrev.set(fq);
+    const quiet = level < .12;                                        // tih začetek = manj iskric
+    if (flux > avgFlux * 1.55 && flux > 260 && t - lastHit > .16) {
+      lastHit = t; const k = Math.min(1, flux / (avgFlux * 3 + 1)), n = Math.round((quiet ? 3 : 10) + k * (quiet ? 4 : 24));
+      pulse = Math.min(1, pulse + (quiet ? .15 : .5) + k * .4);
+      for (let i = 0; i < n; i++) glints.push({x: Math.random() * W, y: Math.random() * H, born: t, r: 1.2 + Math.random() * 2.6 * (.6 + k)});
+    }
+    avgFlux += (flux - avgFlux) * .08;
+  }
+  const L = reduce ? 0 : level * .5 + pulse * .8;
+  glints = glints.filter(g => t - g.born < .7);
+  glints.forEach(g => { const k = 1 - (t - g.born) / .7, r = g.r * (1 + (1 - k) * .6), len = r * 7 * k;
+    cx.fillStyle = `rgba(255,236,190,${k * .95})`; cx.beginPath(); cx.arc(g.x, g.y, r, 0, 6.283); cx.fill();
+    cx.strokeStyle = `rgba(255,244,215,${k * .85})`; cx.lineWidth = 1; cx.beginPath(); cx.moveTo(g.x - len, g.y); cx.lineTo(g.x + len, g.y); cx.moveTo(g.x, g.y - len); cx.lineTo(g.x, g.y + len); cx.stroke(); });
+  dust.forEach(d => { const a = Math.min(1, Math.pow(.5 + .5 * Math.sin(t * d.sp * 2 + d.ph), 3) * (1 - L * .4) + L * .9 * (.5 + .5 * Math.sin(d.ph * 7)));
+    const x = d.x * W, y = ((d.y - t * .004 * d.sp) % 1 + 1) % 1 * H, r = d.r * (1 + L * 1.6);
+    cx.fillStyle = `rgba(241,220,164,${.08 + a * .7})`; cx.beginPath(); cx.arc(x, y, r, 0, 6.283); cx.fill();
+    if (a > .7) { const k = r * (4 + L * 4); cx.strokeStyle = `rgba(255,240,205,${(a - .7) * 1.6})`; cx.lineWidth = .7 + L; cx.beginPath(); cx.moveTo(x - k, y); cx.lineTo(x + k, y); cx.moveTo(x, y - k); cx.lineTo(x, y + k); cx.stroke(); } });
+  bits = bits.filter(b => b.y < H + 40);
+  bits.forEach(b => { b.vy += .28; b.vx *= .985; b.vy *= .985; b.x += b.vx + Math.sin(t * 3 + b.flip) * .6; b.y += b.vy; b.rot += b.vr; b.flip += .15;
+    cx.save(); cx.translate(b.x, b.y); cx.rotate(b.rot); cx.scale(1, Math.cos(b.flip)); cx.fillStyle = b.c; cx.fillRect(-b.w / 2, -b.h / 2, b.w, b.h); cx.restore(); });
+})();
+
+/* --- Odpiranje pisma --- */
+const scene = $("scene"), card = $("card");
+function fitCard() {
+  const cw = Math.min(innerWidth - 32, 460), ch = Math.min(innerHeight - 28, 780);
+  card.style.setProperty("--cw", cw + "px"); card.style.setProperty("--ch", ch + "px");
+}
+fitCard();
+card.classList.add("locked");
+let opened = false;
+async function openLetter() {
+  if (opened) return; opened = true;
+  if (!musicReady) await Promise.race([musicDecoded.catch(() => {}), new Promise(r => setTimeout(r, 1500))]);
+  chime();
+  const s = reduce ? 0 : 1, at = (ms, fn) => setTimeout(fn, ms * s);
+  scene.classList.remove("closed"); scene.classList.add("broken");
+  at(600, () => scene.classList.add("open"));
+  at(950, () => scene.classList.add("flap-behind"));
+  at(2100, () => scene.classList.add("rise"));
+  at(5000, () => { scene.classList.add("out", "gone"); scene.style.transform = "none"; });
+  at(5600, () => burst());   // konfeti ob polni glasnosti glasbe
+  at(6600, () => { card.classList.remove("locked"); $("toRsvp").focus({preventScroll: true}); });
+}
+$("seal").addEventListener("click", openLetter);
+$("hintBtn").addEventListener("click", openLetter);
+
+/* Rahel nagib ovojnice za kazalcem */
+addEventListener("pointermove", e => {
+  if (opened || reduce) return;
+  const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
+  scene.style.transform = `rotateY(${x * 14}deg) rotateX(${-y * 10}deg)`;
+});
+
+/* Obrat kartice */
+const backFace = document.querySelector(".backside"), frontFace = document.querySelector(".front");
+$("toRsvp").onclick = () => { card.classList.add("flipped"); backFace.setAttribute("aria-hidden", "false"); frontFace.setAttribute("aria-hidden", "true"); setTimeout(() => $("rName").focus({preventScroll: true}), reduce ? 0 : 700); };
+$("toFront").onclick = () => { card.classList.remove("flipped"); backFace.setAttribute("aria-hidden", "true"); frontFace.setAttribute("aria-hidden", "false"); };
+
+/* --- Potrditev udeležbe: odgovor gre neposredno v Google Obrazec --- */
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe9uMlYDLTdKA4HxmGk36jF8wtwnwyPs7Y3G09BanUugfgVXA/formResponse";
+const form = $("rsvp");
+form.addEventListener("change", () => { $("yesFields").hidden = !$("attYes").checked; });
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  const name = $("rName").value.trim(), err = $("rErr"), btn = $("rSend");
+  if (!name) { err.textContent = "Vpiši svoje ime, da bom vedela, kdo prihaja."; err.hidden = false; $("rName").focus(); return; }
+  err.hidden = true;
+  const yes = $("attYes").checked;
+  const data = new URLSearchParams();
+  data.append("entry.73498834", name);
+  data.append("entry.1564238430", yes ? "Pridem" : "Žal ne morem");
+  if (yes) data.append("entry.1679084970", $("rCount").value);
+  btn.disabled = true; btn.textContent = "Pošiljam …";
+  try {
+    await fetch(FORM_URL, {method: "POST", mode: "no-cors", body: data});
+    form.hidden = true;
+    $("thanksTitle").innerHTML = yes ? "Hvala, <em></em>!" : "Hvala za sporočilo";
+    if (yes) $("thanksTitle").querySelector("em").textContent = name.split(" ")[0];
+    $("thanksText").textContent = yes ? `Zabeležila sem ${$("rCount").value === "1" ? "1 osebo" : $("rCount").value + " osebe"}. Se vidimo 7. novembra ob 19.00 v Pigalu.` : "Žal mi je, da te ne bo. Nazdravili bomo tudi zate.";
+    $("thanks").hidden = false;
+  } catch (_) {
+    err.textContent = "Pošiljanje ni uspelo. Preveri internetno povezavo in poskusi znova.";
+    err.hidden = false; btn.disabled = false; btn.textContent = "Pošlji potrditev";
+  }
+});
+</script>
+</body>
+</html>
