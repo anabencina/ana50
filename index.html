@@ -150,12 +150,6 @@ dl.facts dd{font-size:clamp(1rem,2.6vh,1.1rem);padding-bottom:clamp(6px,1.4vh,14
   .count span{font-size:.56rem}
 }
 
-/* Plesoče črke ob odprtju */
-.ch{display:inline-block;white-space:pre;will-change:transform}
-.big50 .ch{background:linear-gradient(170deg,#f8e8bb,#d6b56a 50%,#9c7a35);-webkit-background-clip:text;background-clip:text;color:transparent}
-.locked .dance-me .ch{opacity:0}
-.dance .dance-me .ch{animation:chIn .95s cubic-bezier(.2,.75,.25,1.25) both;animation-delay:calc(var(--i) * 60ms + var(--d, 0ms))}
-@keyframes chIn{0%{opacity:0;transform:translateY(.7em) rotate(-14deg) scale(.55)}55%{opacity:1;transform:translateY(-.18em) rotate(5deg) scale(1.08)}78%{transform:translateY(.04em) rotate(-2deg)}100%{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*,*::before{transition-duration:.01ms!important;animation:none!important}}
 [hidden]{display:none!important}
 html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}
@@ -175,8 +169,8 @@ body{margin:0}
         <div class="face front">
           <div class="scroll">
             <span class="eyebrow">Vabilo</span>
-            <p class="big50 dance-me" aria-hidden="true">50</p>
-            <h1 class="dance-me" style="--d:180ms" aria-label="Praznujem petdeset">Praznujem <em>petdeset</em></h1>
+            <p class="big50" aria-hidden="true">50</p>
+            <h1>Praznujem <em>petdeset</em></h1>
             <p class="lead">Pol stoletja je dober razlog za dober večer. Vesela bom, če ga preživiš z mano.</p>
             <dl class="facts">
               <dt>Datum</dt><dd id="fDate"></dd>
@@ -377,7 +371,6 @@ function burst() {
     if (flux > avgFlux * 1.55 && flux > 260 && t - lastHit > .16) {
       lastHit = t; const k = Math.min(1, flux / (avgFlux * 3 + 1)), n = Math.round((quiet ? 3 : 10) + k * (quiet ? 4 : 24));
       pulse = Math.min(1, pulse + (quiet ? .15 : .5) + k * .4);
-      if (!quiet) bopLetters(k);
       for (let i = 0; i < n; i++) glints.push({x: Math.random() * W, y: Math.random() * H, born: t, r: 1.2 + Math.random() * 2.6 * (.6 + k)});
     }
     avgFlux += (flux - avgFlux) * .08;
@@ -397,25 +390,6 @@ function burst() {
 })();
 
 
-/* --- Plesoče črke --- */
-const danceChars = [];
-document.querySelectorAll(".dance-me").forEach(el => {
-  let i = 0;
-  const walk = node => [...node.childNodes].forEach(n => {
-    if (n.nodeType === 3) { const f = document.createDocumentFragment();
-      [...n.textContent].forEach(c => { const sp = document.createElement("span"); sp.className = "ch"; sp.textContent = c; sp.style.setProperty("--i", i++); sp.setAttribute("aria-hidden", "true"); f.appendChild(sp); if (c.trim()) danceChars.push(sp); });
-      n.replaceWith(f); }
-    else if (n.nodeType === 1) walk(n);
-  });
-  walk(el);
-});
-function bopLetters(k) {
-  if (reduce || !card.classList.contains("dance")) return;
-  const n = 1 + Math.round(k * 3);
-  for (let j = 0; j < n; j++) { const c = danceChars[Math.floor(Math.random() * danceChars.length)];
-    c.animate([{transform: "none"}, {transform: `translateY(-${.14 + k * .16}em) rotate(${Math.random() * 10 - 5}deg) scale(${1.05 + k * .08})`}, {transform: "none"}], {duration: 420, easing: "cubic-bezier(.3,.7,.3,1)"}); }
-}
-
 /* --- Odpiranje pisma --- */
 const scene = $("scene"), card = $("card");
 function fitCard() {
@@ -434,7 +408,7 @@ async function openLetter() {
   at(600, () => scene.classList.add("open"));
   at(950, () => scene.classList.add("flap-behind"));
   at(2100, () => scene.classList.add("rise"));
-  at(5000, () => { scene.classList.add("out", "gone"); scene.style.transform = "none"; card.classList.add("dance"); });
+  at(5000, () => { scene.classList.add("out", "gone"); scene.style.transform = "none"; });
   at(5600, () => burst());   // konfeti ob polni glasnosti glasbe
   at(6600, () => { card.classList.remove("locked"); $("toRsvp").focus({preventScroll: true}); });
 }
